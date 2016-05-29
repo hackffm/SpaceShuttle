@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Robo-Cat Control</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!--
+  <link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css">
+  <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+  <script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+  -->
+  <link rel="stylesheet" href="jq/jquery.mobile-1.3.2.min.css">
+  <script src="jq/jquery-1.10.2.min.js"></script>
+  <script src="jq/jquery.mobile-1.3.2.min.js"></script>  
+  <style>
+  #swatchColor1 {
+    height: 20px;
+    background-image: none;
+  }  
+  </style>
+  <script>
+  var ajaxRunning = 0;
+  var timeoutID = setInterval(function(){ refreshCam() }, 50);;
+  function hexFromRGB(r, g, b) {
+    var hex = 
+      r = Number(r).toString( 16 ),
+      g = Number(g).toString( 16 ),
+      b = Number(b).toString( 16 ),
+      ret = "#";
+    if(r.length === 1) { r = "0" + r; }
+    if(g.length === 1) { g = "0" + g; }
+    if(b.length === 1) { b = "0" + b; }    
+    ret = r + g + b;
+    return ret.toUpperCase();
+  }
+  
+  function stripHash(a) { return a.substr(1); }
+  
+  function refreshSwatchColor1() {
+    var red = $( "#c1r" ).val(),
+      green = $( "#c1g" ).val(),
+      blue = $( "#c1b" ).val(),
+      hex = hexFromRGB( red, green, blue );
+
+      $( "#swatchColor1" ).css( "background-color", "#" + hex );
+
+        ajaxRunning++;
+        console.log("ajaxis : "+ajaxRunning);
+        $.ajax({
+          type: "POST",
+          url: "cgi",
+          data: {Color1: hex},
+          success: function( data ) {
+            $( "#TextDebug" ).val(data);
+            ajaxRunning--;
+          }
+        }); 
+  }
+  
+  function refreshCam() {
+    $("#webcamp").attr("src", "http://raspbi:8080/?action=snapshot&n=" + new Date().getTime());
+    //timeoutID = window.setTimeout(refreshCam(), 200);
+    $( "#TextDebug" ).val( "cam " +imageNr);
+    imageNr++;
+  }
+  
+  function refreshHead() {
+    var h = Number($("#c1h").val());
+    var v = Number($("#c1v").val());
+    var look = (h+v*65536).toString();  
+    //console.log("look: " + look);
+    if(ajaxRunning < 3) {
+        ajaxRunning++;
+        console.log("ajaxis : "+ajaxRunning);
+        $.ajax({
+          type: "POST",
+          url: "cgishort",
+          data: {Look: look},
+          success: function( data ) {
+            $( "#TextDebug" ).val(data);
+            ajaxRunning--;
+          }
+        }); 
+    }
+  }
+
+  $( document).on( 'pageinit',null,function(event){
+    /* Initialization stuff */
+    $("TextDebug").textinput({ disabled: true });
+    $("#swatchColor1").css( "background-color", "#ef2929");
+
+    
+    $("#c1r, #c1g, #c1b, #c1h, #c1v").val("0");
+    $("#c1r, #c1g, #c1b, #c1h, #c1v").slider("refresh");
+
+	/* Event handlers */
+	$("#ColorCorrection").on('change', function(e) {
+	  $.ajax({type: "POST", url: "cgi", data: {ColorCorrection: $("#ColorCorrection").val()},
+        success: function( data ) { $( "#TextDebug" ).val(data);
+      }});
+	});
+	
+	$("#c1r, #c1g, #c1b").on('change', function(e) {
+        refreshSwatchColor1();
+    }); 
+    $("#c1r, #c1g, #c1b").on('slidestop', function(e) {
+        refreshSwatchColor1();
+    }); 
+	$("#c1h, #c1v").on('change', function(e) {
+        refreshHead();
+    }); 
+    $("#c1h, #c1v").on('slidestop', function(e) {
+        refreshHead();
+    }); 
+    
+	$("#Pick_Color1").on('change', function(e) {
+	  $.ajax({type: "POST", url: "cgi", data: {
+        Color1: stripHash($("#Pick_Color1").val()) }, 
+        success: function( data ) { $( "#TextDebug" ).val(data);
+      }});
+    });  
+    
+    $("#webcam").on('mousedown', function(e) {
+      $("#TextDebug").val("MD");
+    });
+     
+    $("#webcam").on('mouseup', function(e) {
+      $("#TextDebug").val("MU");
+    });
+    
+    $("#webcamp").on('mousemove', function(e) {
+     var h = e.offsetY*2;
+     var msg = "Handler for .mousemove() called at ";
+     msg += e.offsetX + ", " + e.offsetY + ", " + h;
+     $("#c1h").val(h);
+     $("#c1h").slider("refresh");
+     $( "#TextDebug" ).val( msg  );
+     //$("#webcamp").attr("src", "http://raspbi:8080/?action=snapshot&n=" + new Date().getTime());
+    });
+    
+    
+    
+    
+  });
+  
+$( document ).ready(function() {
+  // Handler for .ready() called.
+  //timeoutID = window.setTimeout(refreshCam(), 200);
+});
+  
+var imageNr = 0; // Serial number of current image
+var finished = new Array(); // References to img objects which have finished downloading
+var paused = false;
+
+
+function createImageLayer() {
+  var img = new Image();
+  img.style.position = "absolute";
+  img.style.zIndex = -1;
+  img.onload = imageOnload;
+  img.onclick = imageOnclick;
+  img.src = "http://raspbi:8080/?action=snapshot&n=" + (++imageNr);
+  var webcam = document.getElementById("webcam");
+  webcam.insertBefore(img, webcam.firstChild);
+}
+
+// Two layers are always present (except at the very beginning), to avoid flicker
+function imageOnload() {
+  this.style.zIndex = imageNr; // Image finished, bring to front!
+  while (1 < finished.length) {
+    var del = finished.shift(); // Delete old image(s) from document
+    del.parentNode.removeChild(del);
+  }
+  finished.push(this);
+  if (!paused) createImageLayer();
+}  
+  </script>
+ 
+</head>
+
+<script type="text/javascript">
+
+
+
+/*
+function imageOnclick() { // Clicking on the image will pause the stream
+  paused = !paused;
+  if (!paused) createImageLayer();
+}
+*/
+
+</script>
+<!--
+<body onload="createImageLayer();">
+-->
+<body>
+<div data-role="page" id="page1">
+    <div data-theme="" data-role="header">
+       <h3><img src="rbi_frei.png" height="32" style="vertical-align:middle">&#32;&#32;Robo-Cat Control</h3>
+    </div>
+    
+    <div data-role="content">
+        <!--
+		<div data-role="fieldcontain">
+			<label for="ColorCorrection">Color correction</label>
+			<select name="ColorCorrection" id="ColorCorrection" data-role="slider">
+				<option value="0">Off</option>
+				<option value="1" selected="selected">On</option>
+			</select>
+		</div>
+        -->
+        
+        <div id="Color1" data-role="collapsible-set">
+            <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d">
+                <h1>
+                    <fieldset class="ui-grid-a">
+                        <div class="ui-block-a">One Color Settings</div>
+                        <div class="ui-block-b"><div id="swatchColor1" class="ui-widget-content ui-corner-all"></div></div>
+                    </fieldset>
+                </h1>   
+            
+                <div data-role="fieldcontain">
+                    <label for="c1r">Red</label>
+                    <input id="c1r" type="range" name="c1r" value="50" min="0" max="255" data-highlight="true">
+
+                    <label for="c1g">Green</label>
+                    <input id="c1g" type="range" name="c1g" value="50" min="0" max="255" data-highlight="true">
+
+                    <label for="c1b">Blue</label>
+                    <input id="c1b" type="range" name="c1b" value="50" min="0" max="255" data-highlight="true">
+                    
+                    <label for="Pick_Color1">Color 1</label>
+                    <input type="color" data-clear-btn="false" name="Pick_Color1" id="Pick_Color1" value="">
+                    
+                    <label for="c1h">H</label>
+                    <input id="c1h" type="range" name="c1h" value="50" min="0" max="1800" data-highlight="true">
+                    
+                    <label for="c1v">V</label>
+                    <input id="c1v" type="range" name="c1v" value="50" min="0" max="1800" data-highlight="true">
+                </div>
+            </div>
+            
+            
+        </div>   
+		
+        <div id="webcami" data-role="collapsible-set">
+          <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d"><h1>Video</h1>
+          <div id="webcam" data-role="fieldcontain">
+            <img src="http://tuttut.dyns.net:5588/?action=snapshot" height="480" width="640" style="vertical-align:middle"  id="webcamp"/>
+          </div>
+          </div>
+        </div>
+
+        
+		<div id="Debuggi" data-role="collapsible-set">
+			<div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d"><h1>Debug</h1>
+			<div data-role="fieldcontain">
+				<textarea name="TextDebug" id="TextDebug">Bla</textarea>
+			</div>
+			</div> 
+		</div>
+
+    </div>
+    
+    <div data-theme="" data-role="footer">
+        <h3>&copy; Tut, 2015</h3>
+    </div>
+</div>
+</body>
+</html>

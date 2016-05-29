@@ -1,0 +1,102 @@
+void serialParser() {
+  static char cmd[32];
+  static byte charCount = 0;
+
+  int r,x,y,phi;
+
+  if(Serial.available()) {
+    // if any char in serial buffer available then do the parsing
+
+    char c;
+    c = Serial.read(); // read one char from serial buffer
+
+    if((c==8) && (charCount>0)) charCount--; // backspace
+
+    if(c>=32) { // char in num char range then add char to cmd array
+      cmd[charCount] = c;
+      charCount++;
+    }
+
+    if((c==0x0D) || (c==0x0A) || (charCount>30) || 
+     ((charCount == 1) && ((c=='a') || (c=='s') || (c=='d') || (c=='w') || (c==' ') || (c=='q') || (c=='e')))
+    ) {
+      // if the char is NL(New Line 0x0A) 
+      // or CR (carriage return 0x0D) 
+      // or cmd array buffer limit reached
+      // parse the cmd buffer
+
+      cmd[charCount]=0; // clear the last char in cmd buffer
+
+      if(charCount>=1) { // prevent empty cmd buffer parsing
+
+        switch(cmd[0]) {
+          case '?':
+            // show command listup
+            Serial.println("Hallo Dave...\a");
+            break;
+
+          case ' ':
+            fahr(0,0);
+            break;
+            
+          case 'a':
+            fahr(speed1,0);
+            break;
+            
+          case 'd':
+            fahr(0,speed1);
+            break; 
+    
+          case 'w':
+            fahr(speed1,speed1);
+            break;  
+   
+          case 's':
+            fahr(-speed1,-speed1);
+            break;  
+
+          case 'q':
+            fahr(speed1,-speed1);
+            break;
+   
+          case 'e':
+            fahr(-speed1,speed1);
+            break;            
+
+          case 'p':
+            if(charCount>=2) {
+              switch(cmd[1]) {
+                case 'p':
+                  // relative goto parser
+                  
+                  r = sscanf_P(&cmd[2],PSTR("%i"),&speed1);
+                  if(r==1) {
+                    Serial.println(speed1); 
+                  } else {
+                    Serial.println("?");
+                  }
+                  break;
+
+                case 'a':
+
+                  break;
+
+                default:
+                  Serial.println("valid commands pp");
+                  break;
+              }
+            }
+            
+            break; // case 'g'
+
+          default:
+            Serial.println("hae?\a");
+            break;
+
+        }
+      }
+      charCount = 0;
+      Serial.print(">");
+    }
+  }
+}

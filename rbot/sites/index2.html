@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Rundbunt Control</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!--
+  <link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css">
+  <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+  <script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+  -->
+  <link rel="stylesheet" href="jq/jquery.mobile-1.3.2.min.css">
+  <script src="jq/jquery-1.10.2.min.js"></script>
+  <script src="jq/jquery.mobile-1.3.2.min.js"></script>  
+  <style>
+  #swatchColor1 {
+    height: 20px;
+    background-image: none;
+  }
+  #swatchColor2 {
+    height: 20px;
+    background-image: none;
+  } 
+  #swatchColor3 {
+    height: 20px;
+    background-image: none;
+  }    
+  </style>
+  <script>
+  var ajaxRunning = 0;
+  function hexFromRGB(r, g, b) {
+    var hex = 
+      r = Number(r).toString( 16 ),
+      g = Number(g).toString( 16 ),
+      b = Number(b).toString( 16 ),
+      ret = "#";
+    if(r.length === 1) { r = "0" + r; }
+    if(g.length === 1) { g = "0" + g; }
+    if(b.length === 1) { b = "0" + b; }    
+    ret = r + g + b;
+    return ret.toUpperCase();
+  }
+  
+  function stripHash(a) { return a.substr(1); }
+  
+  function refreshSwatchColor1() {
+    var red = $( "#c1r" ).val(),
+      green = $( "#c1g" ).val(),
+      blue = $( "#c1b" ).val(),
+      hex = hexFromRGB( red, green, blue );
+    var h = Number($("#c1h").val());
+    var v = Number($("#c1v").val());
+    var look = (h+v*65536).toString();
+    
+    //console.log("look: " + look);
+      $( "#swatchColor1" ).css( "background-color", "#" + hex );
+      console.log("refreshSwatchColor1 + #"+hex);
+      /*
+    $.ajax("simpleform.cgi?colorhex="+hex,{dataType:"text"})
+    .success(function(data,status,jqxhr)
+    {
+        alert(data);
+    }); 
+    */
+    ajaxRunning++;
+    //console.log("ajaxis + "+ajaxRunning);
+    $.ajax({
+      type: "POST",
+      url: "cgi",
+      data: {Color1: hex, Look: look},
+      success: function( data ) {
+        $( "#TextDebug" ).val(data);
+        ajaxRunning--;
+      }
+    });
+
+    
+  }
+  
+  function refreshSwatchColor2() {
+    var red = $( "#c2r" ).val(),
+      green = $( "#c2g" ).val(),
+      blue = $( "#c2b" ).val(),
+      hex = hexFromRGB( red, green, blue );
+      $( "#swatchColor2" ).css( "background-color", "#" + hex );
+      console.log("refreshSwatchColor2 + #"+hex);
+      /*
+    $.ajax("cgi?colorhex="+hex,{dataType:"text"})
+    .success(function(data,status,jqxhr)
+    {
+        alert(data);
+    }); */
+  }
+
+  $( document).on( 'pageinit',null,function(event){
+    /* Initialization stuff */
+    $("TextDebug").textinput({ disabled: true });
+    $("#swatchColor1").css( "background-color", "#ef2929");
+    $("#swatchColor2").css( "background-color", "#8ae234");
+	$("#swatchColor3").css( "background-color", "#8ae2ff");
+    
+    $("#c1r, #c1g, #c1b, #c1h, #c1v").val("0");
+    $("#c1r, #c1g, #c1b, #c1h, #c1v").slider("refresh");
+
+	/* Event handlers */
+	$("#ColorCorrection").on('change', function(e) {
+	  $.ajax({type: "POST", url: "cgi", data: {ColorCorrection: $("#ColorCorrection").val()},
+        success: function( data ) { $( "#TextDebug" ).val(data);
+      }});
+	});
+
+    $(".AnimSelect").on('change', function(e) {
+	  $.ajax({type: "POST", url: "cgi", data: {AnimSelect: $(".AnimSelect:checked").val()},
+        success: function( data ) { $( "#TextDebug" ).val(data);
+      }});
+    });
+	
+	$("#c1r, #c1g, #c1b, #c1h, #c1v").on('change', function(e) {
+        refreshSwatchColor1();
+    }); 
+    $("#c1r, #c1g, #c1b, #c1h, #c1v").on('slidestop', function(e) {
+        refreshSwatchColor1();
+    }); 
+	
+	$("#TwoColor_Color1, #TwoColor_Color2, #TwoColor_Gradient").on('change', function(e) {
+	  $.ajax({type: "POST", url: "cgi", data: {
+        TwoColor_Color1: stripHash($("#TwoColor_Color1").val()), 
+        TwoColor_Color2: stripHash($("#TwoColor_Color2").val()),
+        TwoColor_Gradient: $("#TwoColor_Gradient").val()},
+        success: function( data ) { $( "#TextDebug" ).val(data);
+      }});
+	  $( "#swatchColor2" ).css( "background-color", $("#TwoColor_Color1").val() );
+      $( "#swatchColor3" ).css( "background-color", $("#TwoColor_Color2").val() );
+    });  
+    
+    
+	$("#Plasma_MainSpeed, #Plasma_Wave1Amp, #Plasma_Wave1Freq, #Plasma_Wave2Amp, #Plasma_Wave2Freq, #Plasma_Wave3Amp, #Plasma_Wave3Freq").on('slidestop', function(e) {
+	  $.ajax({type: "POST", url: "cgi", data: {
+            Plasma_MainSpeed: $("#Plasma_MainSpeed").val(),
+            Plasma_Wave1Amp:  $("#Plasma_Wave1Amp" ).val(),
+            Plasma_Wave1Freq: $("#Plasma_Wave1Freq").val(),
+            Plasma_Wave2Amp:  $("#Plasma_Wave2Amp" ).val(),
+            Plasma_Wave2Freq: $("#Plasma_Wave2Freq").val(),
+            Plasma_Wave3Amp:  $("#Plasma_Wave3Amp" ).val(),
+            Plasma_Wave3Freq: $("#Plasma_Wave3Freq").val()
+            },
+        success: function( data ) { $( "#TextDebug" ).val(data);
+      }}); 
+    });   
+
+    $("#Anim1_MainSpeed").on('slidestop', function(e) {
+	  $.ajax({type: "POST", url: "cgi", data: {
+            Anim1_MainSpeed: $("#Anim1_MainSpeed").val()
+            },
+        success: function( data ) { $( "#TextDebug" ).val(data);
+      }}); 
+    }); 
+    
+  });
+  </script>
+ 
+</head>
+<body>
+
+<div data-role="page" id="page1">
+    <div data-theme="" data-role="header">
+       <h3><img src="rbi_frei.png" height="32" style="vertical-align:middle">&#32;&#32;Rundbunt Control</h3>
+    </div>
+    
+    <div data-role="content">
+		<div data-role="fieldcontain">
+			<label for="ColorCorrection">Color correction</label>
+			<select name="ColorCorrection" id="ColorCorrection" data-role="slider">
+				<option value="0">Off</option>
+				<option value="1" selected="selected">On</option>
+			</select>
+		</div>
+
+		<div id="AnimSelectHead" data-role="fieldcontain"><fieldset data-role="controlgroup" data-type="horizontal">
+			<legend>Choose animation:</legend>
+			<input type="radio" class="AnimSelect" name="AnimSelectN" id="AnimSelecta" value="OneColor" checked="checked">
+			<label for="AnimSelecta">One Color</label>
+			<input type="radio" class="AnimSelect" name="AnimSelectN" id="AnimSelectb" value="TwoColors">
+			<label for="AnimSelectb">Two Colors</label>
+			<input type="radio" class="AnimSelect" name="AnimSelectN" id="AnimSelectc" value="Plasma">
+			<label for="AnimSelectc">Plasma</label>
+			<input type="radio" class="AnimSelect" name="AnimSelectN" id="AnimSelectd" value="Anim1">
+			<label for="AnimSelectd">Anim1</label>
+        </fieldset></div>
+        
+        <div id="Color1" data-role="collapsible-set">
+            <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d">
+                <h1>
+                    <fieldset class="ui-grid-a">
+                        <div class="ui-block-a">One Color Settings</div>
+                        <div class="ui-block-b"><div id="swatchColor1" class="ui-widget-content ui-corner-all"></div></div>
+                    </fieldset>
+                </h1>   
+            
+                <div data-role="fieldcontain">
+                    <label for="c1r">Red</label>
+                    <input id="c1r" type="range" name="c1r" value="50" min="0" max="255" data-highlight="true">
+
+                    <label for="c1g">Green</label>
+                    <input id="c1g" type="range" name="c1g" value="50" min="0" max="255" data-highlight="true">
+
+                    <label for="c1b">Blue</label>
+                    <input id="c1b" type="range" name="c1b" value="50" min="0" max="255" data-highlight="true">
+                    
+                    <label for="c1h">H</label>
+                    <input id="c1h" type="range" name="c1h" value="50" min="0" max="1800" data-highlight="true">
+                    
+                    <label for="c1v">V</label>
+                    <input id="c1v" type="range" name="c1v" value="50" min="0" max="1800" data-highlight="true">
+
+                </div>
+            </div>
+            
+            
+            <div data-role="collapsible" data-theme="b" data-content-theme="d">
+                <h1>
+                    <fieldset class="ui-grid-a">
+                        <div class="ui-block-a">Two Colors Settings</div>
+						<fieldset class="ui-grid-a">
+                        <div class="ui-block-b"><div id="swatchColor2" class="ui-widget-content ui-corner-all"></div></div>
+						<div class="ui-block-b"><div id="swatchColor3" class="ui-widget-content ui-corner-all"></div></div>
+						</fieldset>
+                    </fieldset>
+                </h1> 
+                <div data-role="fieldcontain">
+                    <label for="TwoColor_Gradient">Color gradient</label>
+                    <select name="TwoColor_Gradient" id="TwoColor_Gradient" data-role="slider">
+                        <option value="0">Off</option>
+                        <option value="1" selected="selected">On</option>
+                    </select><hr>            
+					<label for="TwoColor_Color1">Color 1</label>
+					<input type="color" data-clear-btn="false" name="TwoColor_Color1" id="TwoColor_Color1" value="">
+					<label for="TwoColor_Color2">Color 2</label>
+					<input type="color" data-clear-btn="false" name="TwoColor_Color2" id="TwoColor_Color2" value="">	
+				</div>
+            </div>
+			
+            <div data-role="collapsible" data-collapsed="true" data-theme="b" data-content-theme="d">
+                <h1>Plasma Settings <!--
+                    <fieldset class="ui-grid-a">
+                        <div class="ui-block-a">Plasma Settings</div>
+                        <div class="ui-block-b"><div id="swatchColor1" class="ui-widget-content ui-corner-all"></div></div>
+                    </fieldset> -->
+                </h1>   
+            
+                <div data-role="fieldcontain">
+                    <label for="Plasma_MainSpeed">Main Speed</label>
+                    <input id="Plasma_MainSpeed" type="range" name="Plasma_MainSpeed" value="50" min="0" max="255" data-highlight="true">
+                    <hr>
+                    <label for="Plasma_Wave1Amp">Wave 1 Amplitude</label>
+                    <input id="Plasma_Wave1Amp" type="range" name="Plasma_Wave1Amp" value="50" min="0" max="255" data-highlight="true">
+                    <label for="Plasma_Wave1Freq">Wave 1 Frequency</label>
+                    <input id="Plasma_Wave1Freq" type="range" name="Plasma_Wave1Freq" value="50" min="0" max="255" data-highlight="true">
+					<hr>
+                    <label for="Plasma_Wave2Amp">Wave 2 Amplitude</label>
+                    <input id="Plasma_Wave2Amp" type="range" name="Plasma_Wave2Amp" value="50" min="0" max="255" data-highlight="true">
+                    <label for="Plasma_Wave2Freq">Wave 2 Frequency</label>
+                    <input id="Plasma_Wave2Freq" type="range" name="Plasma_Wave2Freq" value="50" min="0" max="255" data-highlight="true">
+					<hr>
+                    <label for="Plasma_Wave3Amp">Wave 3 Amplitude</label>
+                    <input id="Plasma_Wave3Amp" type="range" name="Plasma_Wave3Amp" value="50" min="0" max="255" data-highlight="true">
+                    <label for="Plasma_Wave3Freq">Wave 3 Frequency</label>
+                    <input id="Plasma_Wave3Freq" type="range" name="Plasma_Wave3Freq" value="50" min="0" max="255" data-highlight="true">				
+
+                </div>
+            </div>	
+
+            <div data-role="collapsible" data-collapsed="true" data-theme="b" data-content-theme="d">
+                <h1>Anim1 Settings</h1>   
+            
+                <div data-role="fieldcontain">
+                    <label for="Anim1_MainSpeed">Main Speed</label>
+                    <input id="Anim1_MainSpeed" type="range" name="Anim1_MainSpeed" value="50" min="0" max="255" data-highlight="true">
+                    <hr>
+                </div>
+            </div>            
+            
+        </div>   
+		
+		<div id="Color1" data-role="collapsible-set">
+			<div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d"><h1>Debug</h1>
+			<div data-role="fieldcontain">
+			<!-- <label for="TextDebug">Textarea:</label> -->
+				<textarea name="TextDebug" id="TextDebug">Bla</textarea>
+			</div>
+			</div> 
+		</div>
+  <script>
+
+ 
+  </script>
+    </div>
+    
+    
+    <div data-theme="" data-role="footer">
+        <h3>&copy; Tut, 2013</h3>
+    </div>
+</div>
+</body>
+</html>
