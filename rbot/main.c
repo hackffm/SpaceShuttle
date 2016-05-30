@@ -3,6 +3,12 @@
 
 //#include <wiringPiSPI.h>
 //#include <bcm2835.h>
+
+#include "libfreenect.hpp"
+#include <iostream>
+#include <vector>
+#include <cmath>
+
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
@@ -37,6 +43,11 @@ int	lidardataTimeout[MAXLIDARDATA];
 int VBat = 0;
 
 pthread_mutex_t serialQueueMutex;
+
+Freenect::Freenect freenect;
+MyFreenectDevice* device;
+double freenect_angle(0);
+freenect_video_format requested_format(FREENECT_VIDEO_RGB);
 
 // command will be send if first byte is not 0 
 struct serialQueue_s {
@@ -473,6 +484,22 @@ void doSerialQueue(void) {
 
 int main(int argc, char **argv)
 {
+
+  //Get Kinect Device
+  device = &freenect.createDevice<MyFreenectDevice>(0);
+  //Start Kinect Device
+  device->setTiltDegrees(10);
+  //device->startVideo();
+  // device->startDepth();
+  //handle Kinect Device Data
+  device->setLed(LED_RED);
+  // displayKinectData(device);
+  //Stop Kinect Device
+  //device->stopVideo();
+  // device->stopDepth();
+  // device->setLed(LED_OFF);
+
+
   struct mg_context *ctx;
   const char *options[] = {"listening_ports", "5580", "document_root", "sites", NULL};
   struct mg_callbacks callbacks;
