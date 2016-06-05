@@ -4,7 +4,6 @@
 //#include <wiringPiSPI.h>
 //#include <bcm2835.h>
 
-#include "libfreenect.hpp"
 #include <iostream>
 #include <vector>
 #include <cmath>
@@ -29,6 +28,7 @@
 #include <linux/spi/spidev.h>
 #include <unistd.h>
 #include <pthread.h>
+
 
 #include "mongoose.h"
 
