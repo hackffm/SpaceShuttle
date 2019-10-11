@@ -1,23 +1,30 @@
-#define POWERHOLD A1
-#define POWERLED  A2
-#define LIGHT     10
-
 #include <AccelStepper.h>
-// #include <MultiStepper.h>
-// 
-#define STEPPER1_DIR_PIN 6
-#define STEPPER1_STEP_PIN 2
-// 
-#define STEPPER2_DIR_PIN 7
-#define STEPPER2_STEP_PIN 3
-// 
-#define STEPPER3_DIR_PIN 8
-#define STEPPER3_STEP_PIN 4
-// 
-#define STEPPER4_DIR_PIN 9
-#define STEPPER4_STEP_PIN 5
 
-#define STEPPER_ENABLE_PIN A3
+// pin mapping for MKS Gen L board
+
+// endstop connector
+#define POWERHOLD 37
+#define POWERLED  35
+#define LIGHT     17
+
+// FR stepper driver x
+#define STEPPER1_DIR_PIN    55
+#define STEPPER1_STEP_PIN   54
+#define STEPPER1_STEP_EN    38
+// FL stepper driver Y
+#define STEPPER2_DIR_PIN    61
+#define STEPPER2_STEP_PIN   60
+#define STEPPER2_STEP_EN    56
+// RR stepper driver Z
+#define STEPPER3_DIR_PIN    48
+#define STEPPER3_STEP_PIN   46
+#define STEPPER3_STEP_EN    62
+// RL stepper driver E0
+#define STEPPER4_DIR_PIN    28
+#define STEPPER4_STEP_PIN   26
+#define STEPPER4_STEP_EN    24
+
+
 // Define some steppers and the pins the will use
 AccelStepper stepper1(AccelStepper::DRIVER, STEPPER1_STEP_PIN, STEPPER1_DIR_PIN);
 AccelStepper stepper2(AccelStepper::DRIVER, STEPPER2_STEP_PIN, STEPPER2_DIR_PIN);
@@ -45,27 +52,29 @@ int loopCnt = 0;
 uint16_t driveTimeout = 0;
 
 void setup()
-{  
-  pinMode(STEPPER_ENABLE_PIN, OUTPUT); // enable pin LOW = on
-  pinMode(11, OUTPUT);
-  pinMode(12, OUTPUT);
-  pinMode(13, OUTPUT);  
-  
+{
+  pinMode(STEPPER1_STEP_EN, OUTPUT); // enable pin LOW = on
+  pinMode(STEPPER2_STEP_EN, OUTPUT); // enable pin LOW = on
+  pinMode(STEPPER3_STEP_EN, OUTPUT); // enable pin LOW = on
+  pinMode(STEPPER4_STEP_EN, OUTPUT); // enable pin LOW = on
+
+
   pinMode(A0, INPUT);
 
-  digitalWrite(POWERHOLD, HIGH);
   pinMode(POWERHOLD, OUTPUT);
-  
   pinMode(POWERLED,  OUTPUT);
   pinMode(LIGHT,     OUTPUT);
-  digitalWrite(POWERLED, HIGH); 
+
+  digitalWrite(POWERHOLD, HIGH);
+  digitalWrite(POWERLED, HIGH);
   digitalWrite(LIGHT, LOW);
-  
-  digitalWrite(STEPPER_ENABLE_PIN, HIGH); // enable pin LOW = on
-  digitalWrite(11, LOW);
-  digitalWrite(12, HIGH);
-  digitalWrite(13, LOW);
-  
+
+  digitalWrite(STEPPER1_STEP_EN, HIGH); // enable pin LOW = on
+  digitalWrite(STEPPER2_STEP_EN, HIGH); // enable pin LOW = on
+  digitalWrite(STEPPER3_STEP_EN, HIGH); // enable pin LOW = on
+  digitalWrite(STEPPER4_STEP_EN, HIGH); // enable pin LOW = on
+
+
   stepper1.setMaxSpeed(maxMoveSpeed);
   stepper1.setAcceleration(100.0);
 
@@ -77,7 +86,7 @@ void setup()
 
   stepper4.setMaxSpeed(maxMoveSpeed);
   stepper4.setAcceleration(100.0);
-  
+
   Serial.begin(38400);
 }
 
@@ -89,9 +98,9 @@ void loop() {
   stepper4.runSpeed();
   if(((uint16_t)millis() - driveTimeout) > DTIMEOUT) {
     driveTimeout = millis();
-    drive(0,0,0);    
+    drive(0,0,0);
   }
-  
+
   if(loopCnt++ > 5000) {
     loopCnt = 0;
     millivoltAvg = millivoltAvg - (millivoltAvg/16) + analogRead(0);
@@ -116,24 +125,30 @@ void updateWheels() {
   rf = act_x - act_y + act_rotate;
   lr = -act_x + act_y + act_rotate;
   rr = -act_x - act_y + act_rotate;
-  
+
   if((lf == 0) && (rf == 0) && (lr == 0) && (rr == 0)) {
-    digitalWrite(STEPPER_ENABLE_PIN, HIGH); // enable pin HIGH = off 
+    digitalWrite(STEPPER1_STEP_EN, HIGH); // enable pin LOW = on
+    digitalWrite(STEPPER2_STEP_EN, HIGH); // enable pin LOW = on
+    digitalWrite(STEPPER3_STEP_EN, HIGH); // enable pin LOW = on
+    digitalWrite(STEPPER4_STEP_EN, HIGH); // enable pin LOW = on
   } else {
-    digitalWrite(STEPPER_ENABLE_PIN, LOW); // enable pin LOW = on 
-  }  
+    digitalWrite(STEPPER1_STEP_EN, LOW); // enable pin LOW = on
+    digitalWrite(STEPPER2_STEP_EN, LOW); // enable pin LOW = on
+    digitalWrite(STEPPER3_STEP_EN, LOW); // enable pin LOW = on
+    digitalWrite(STEPPER4_STEP_EN, LOW); // enable pin LOW = on
+  }
   stepper1.setSpeed(-rf);
   stepper2.setSpeed(-lf);
   stepper3.setSpeed(lr);
   stepper4.setSpeed(rr);
 }
 
-void drive(long x, long y, long rotate) {  
+void drive(long x, long y, long rotate) {
   // later: add acceleration here
   act_x = constrain(x*32L,-16000L,16000L);
   act_y = constrain(y*32L,-16000L,16000L);
   act_rotate = constrain(rotate*-64L,-16000L,16000L);
-  
+
   updateWheels();
 }
 
@@ -147,47 +162,47 @@ void serialParser() {
     char c;
     //digitalWrite(LEDGN1, !digitalRead(LEDGN1));
     c = Serial.read();
-    
+
     if((c==8) && (charCount>0)) charCount--; // backspace
-    
+
     if(c>=32) { // char in num char range then add char to cmd array
       cmd[charCount] = c;
       charCount++;
-    }    
-    
-    if(((c == 0x0a) || (c == 0x0d) || (charCount > 30)) || 
+    }
+
+    if(((c == 0x0a) || (c == 0x0d) || (charCount > 30)) ||
       ((charCount==1 ) && ((c=='q') || (c=='w') ||(c=='e') ||(c=='a') ||
       (c=='s') || (c=='d') || (c==' ')))) { // (c == 0x0d) ||
       cmd[charCount] = 0;
       controlUpdate = false;
-      
+
       if(charCount >= 1) {
         switch(cmd[0]) {
-          case 'q': 
+          case 'q':
             drive(0,0,-maxRotSpeed);
             driveTimeout = millis();
             break;
-          case 'e': 
+          case 'e':
             drive(0,0,maxRotSpeed);
             driveTimeout = millis();
             break;
-          case 'w': 
+          case 'w':
             drive(0,moveSpeed,0);
             driveTimeout = millis();
             break;
-          case 's': 
+          case 's':
             drive(0,-moveSpeed,0);
             driveTimeout = millis();
             break;
-          case 'a': 
-            drive(-moveSpeed,0,0); 
+          case 'a':
+            drive(-moveSpeed,0,0);
             driveTimeout = millis();
             break;
-          case 'd': 
+          case 'd':
             drive(moveSpeed,0,0);
             driveTimeout = millis();
             break;
-                    
+
           case 'm': // move
             {
               short xx,yy,rr;
@@ -202,12 +217,12 @@ void serialParser() {
               }
             }
             break;
-        
+
           case ' ': // stop
             // do something
             drive(0,0,0);
             break;
-          
+
           case 'v':
             Serial.println(millivolt);
             break;
@@ -218,7 +233,7 @@ void serialParser() {
                 int r;
                 // off after 1 minute
                   r = sscanf_P(&cmd[2],PSTR("%i"),&posi);
-                  if((r==1) && (posi == 999)) 
+                  if((r==1) && (posi == 999))
                   {
                     Serial.println("Off after 60s!");
                       drive(0,0,0);
@@ -232,12 +247,12 @@ void serialParser() {
                   }
 
               }
-            
+
             break; // case 'p'
-            
+
           case 'c':
             if(charCount>=4) {
-              int red,green,blue,r; 
+              int red,green,blue,r;
               r = sscanf_P(&cmd[1],PSTR("%i %i %i"),&red,&green,&blue);
               if(r==3) {
                 //if(red>10) {
@@ -246,13 +261,13 @@ void serialParser() {
                 //  digitalWrite(LIGHT, LOW);
                 //}
               }
-            }            
-            break; // case 'c'            
-          
+            }
+            break; // case 'c'
+
         }
 
         /*
-        if(bufcnt >= 4) { 
+        if(bufcnt >= 4) {
         	uint16_t var_temp;
         	var_temp = (get2Hex((char*)buf))*256U+get2Hex((char*)(buf+2));
         	speed2DistPerSec = (var_temp<0x7fffU) ? var_temp : 0x7fffU;
@@ -264,5 +279,3 @@ void serialParser() {
     }
   }
 }
-
-
