@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="167.79000000000002mm" height="112.28999999999999mm" viewBox="0 0 167.79000000000002 112.28999999999999" xmlns="http://www.w3.org/2000/svg" version="1.1">
+<g id="Sketch001" transform="translate(1.645000,110.645000) scale(1,-1)">
+<circle cx="7.5" cy="94.0" r="1.5" stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none"/>
+<circle cx="7.5" cy="15.0" r="1.5" stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none"/>
+<circle cx="156.9999999999999" cy="15.0" r="1.5" stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none"/>
+<circle cx="157.0" cy="94.0" r="1.5" stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none"/>
+<title>b'screw'</title>
+</g>
+<g id="Sketch002" transform="translate(1.645000,110.645000) scale(1,-1)">
+<path id="Sketch002_w0000"  d="M 0.0 109.0 L 164.5 109.0 L 164.5 0.0 L 0.0 0.0 L 0.0 109.0 " stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none;fill-rule: evenodd "/>
+<title>b'bottomplate'</title>
+</g>
+<g id="Sketch004" transform="translate(1.645000,110.645000) scale(1,-1)">
+<circle cx="7.5" cy="80.344528" r="3.0" stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none"/>
+<circle cx="7.5" cy="28.655472" r="3.0" stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none"/>
+<circle cx="157.0" cy="28.655472" r="3.0" stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none"/>
+<circle cx="157.0" cy="80.344528" r="3.0" stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none"/>
+<title>b'screw002'</title>
+</g>
+</svg>
