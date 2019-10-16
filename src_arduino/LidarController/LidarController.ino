@@ -46,7 +46,7 @@ struct lidarDataPoint {
 
 lidarDataPoint lidarRadialDataPoints[121];
 
-volatile uint16_t targetStepOCR1A = 4;
+volatile uint16_t targetStepOCR1A = 8;
 
 volatile uint16_t currentPos;
 
@@ -104,7 +104,7 @@ void setup(){
 	TCCR1C = 0;
 	TCNT1  = 0;
 
-	OCR1A = -1; // 62500;      // compare match register 16MHz/256/2Hz
+	OCR1A = -1; // -1 62500;      // compare match register 16MHz/256/2Hz
 	TCCR1A |= (1 << COM1A0);	
 	TCCR1B |= (1 << WGM12);   // CTC mode
 	TCCR1B |= (1 << CS12);    // 256 prescaler 
@@ -119,8 +119,8 @@ ISR(TIMER1_COMPA_vect)
 	uint16_t deltaTargetOCR1A;
 	noInterrupts();
 	deltaTargetOCR1A = OCR1A-targetStepOCR1A;
-	OCR1A -= deltaTargetOCR1A/2;
-	if(deltaTargetOCR1A<10) {
+	OCR1A -= deltaTargetOCR1A/10;
+	if(deltaTargetOCR1A<targetStepOCR1A) {
 		OCR1A = targetStepOCR1A;
 		/// TIMSK1 = 0;
 		// digitalWrite(PIN_LED, HIGH);
