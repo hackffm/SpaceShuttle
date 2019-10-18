@@ -53,9 +53,9 @@ long act_x = 0;
 long act_y = 0;
 long act_rotate = 0;
 
-long maxRotSpeed = 16000;
-long maxMoveSpeed = 16000;
-long moveSpeed = 20; // 2000
+long maxRotSpeed = 16000L;
+long maxMoveSpeed = 16000L; // 16000
+long moveSpeed = 2000L; // 2000
 
 int millivoltAvg;
 int millivolt;
@@ -101,16 +101,16 @@ void setup()
 
 
   stepper1.setMaxSpeed(maxMoveSpeed);
-  stepper1.setAcceleration(100.0);
+  // stepper1.setAcceleration(1000);
 
   stepper2.setMaxSpeed(maxMoveSpeed);
-  stepper2.setAcceleration(100.0);
+  // stepper2.setAcceleration(1000);
 
   stepper3.setMaxSpeed(maxMoveSpeed);
-  stepper3.setAcceleration(100.0);
+  // stepper3.setAcceleration(1000);
 
   stepper4.setMaxSpeed(maxMoveSpeed);
-  stepper4.setAcceleration(100.0);
+  // stepper4.setAcceleration(1000);
 
   Serial.begin(38400);
 }
@@ -163,9 +163,10 @@ void updateWheels() {
     digitalWrite(STEPPER4_STEP_EN, LOW); // enable pin LOW = on
   }
   stepper1.setSpeed(-rf);
-  stepper2.setSpeed(lf);
+  stepper2.setSpeed(-lf);
   stepper3.setSpeed(lr);
   stepper4.setSpeed(rr);
+
 }
 
 void drive(long x, long y, long rotate) {
@@ -204,27 +205,27 @@ void serialParser() {
       if(charCount >= 1) {
         switch(cmd[0]) {
           case 'q':
-            drive(0,0,-maxRotSpeed);
+            drive(0L,0L,-maxRotSpeed);
             driveTimeout = millis();
             break;
           case 'e':
-            drive(0,0,maxRotSpeed);
+            drive(0L,0L,maxRotSpeed);
             driveTimeout = millis();
             break;
           case 'w':
-            drive(0,moveSpeed,0);
+            drive(0L,moveSpeed,0L);
             driveTimeout = millis();
             break;
           case 's':
-            drive(0,-moveSpeed,0);
+            drive(0L,-moveSpeed,0L);
             driveTimeout = millis();
             break;
           case 'a':
-            drive(-moveSpeed,0,0);
+            drive(-moveSpeed,0L,0L);
             driveTimeout = millis();
             break;
           case 'd':
-            drive(moveSpeed,0,0);
+            drive(moveSpeed,0L,0L);
             driveTimeout = millis();
             break;
 
@@ -233,11 +234,11 @@ void serialParser() {
               short xx,yy,rr;
               if(sscanf((const char*)&cmd[1],"%d %d %d",&xx,&yy,&rr)==3) {
                 drive(xx,yy,rr);
-                //Serial.print(act_x);
-                //Serial.print(',');
-                //Serial.print(act_y);
-                //Serial.print(',');
-                //Serial.println(act_rotate);
+                Serial.print(act_x);
+                Serial.print(',');
+                Serial.print(act_y);
+                Serial.print(',');
+                Serial.println(act_rotate);
                 driveTimeout = millis();
               }
             }

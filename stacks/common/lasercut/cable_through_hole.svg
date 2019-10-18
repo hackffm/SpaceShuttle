@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="40.28429574624955mm"
+   height="136.70673568385408mm"
+   viewBox="0 0 40.28429574624955 136.70673568385408"
+   version="1.1"
+   id="svg58"
+   sodipodi:docname="cable_through_hole.svg"
+   inkscape:version="0.92.4 (unknown)">
+  <metadata
+     id="metadata64">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs62" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1869"
+     inkscape:window-height="1025"
+     id="namedview60"
+     showgrid="false"
+     inkscape:zoom="1.6334844"
+     inkscape:cx="76.1278"
+     inkscape:cy="258.34345"
+     inkscape:window-x="51"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg58" />
+  <g
+     id="g78"
+     transform="matrix(-1,0,0,1,40.247549,0)">
+    <path
+       sodipodi:nodetypes="scssssscs"
+       id="Sketch_w0000"
+       d="m 14.889352,102.57987 c -3.094025,-1.78634 -5.0000164,-5.087628 -5,-8.6603 V 42.787127 c -1.1e-6,-3.572657 1.905988,-6.873929 5,-8.660257 l 17.5,-10.103627 c 3.333333,-1.924501 7.5,0.481125 7.5,4.330127 v 80 c 2e-6,3.849 -4.166666,6.25463 -7.5,4.33013 z"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.34999999;stroke-miterlimit:4;stroke-dasharray:none"
+       inkscape:connector-curvature="0" />
+    <path
+       sodipodi:nodetypes="csscc"
+       id="Sketch_w0001"
+       d="m 0.657252,13.47627 7.500049,12.990349 c 1.3333654,2.309433 4.797516,0.309384 3.464151,-2.000049 L 4.121403,11.476238 C 2.7879266,9.1672618 -0.67622445,11.167294 0.657252,13.47627 Z"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.34999999;stroke-miterlimit:4;stroke-dasharray:none"
+       inkscape:connector-curvature="0" />
+    <path
+       sodipodi:nodetypes="ccccc"
+       id="Sketch_w0002"
+       d="m 18.157252,3.37237 7.500049,12.990619 c 1.333345,2.3094 4.797446,0.309381 3.464101,-2.000019 L 21.621403,1.37261 C 20.282227,-0.91428389 16.8466,1.0690101 18.157252,3.37237 Z"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.34999999;stroke-miterlimit:4;stroke-dasharray:none"
+       inkscape:connector-curvature="0" />
+    <path
+       sodipodi:nodetypes="ccccc"
+       id="Sketch_w0003"
+       d="M 8.157252,110.24012 0.657301,123.2305 c -1.33331275,2.30943 2.1308382,4.3094 3.464151,1.99997 l 7.499951,-12.99035 c 1.331287,-2.30888 -2.1328644,-4.30888 -3.464151,-2 z"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.34999999;stroke-miterlimit:4;stroke-dasharray:none"
+       inkscape:connector-curvature="0" />
+    <path
+       sodipodi:nodetypes="ccccc"
+       id="Sketch_w0004"
+       d="m 25.657302,120.34377 -7.500001,12.99036 c -1.333359,2.30943 2.130792,4.30947 3.464151,2.00004 l 7.499951,-12.99042 c 1.324976,-2.30716 -2.12855,-4.30103 -3.464101,-1.99998 z"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.34999999;stroke-miterlimit:4;stroke-dasharray:none"
+       inkscape:connector-curvature="0" />
+    <circle
+       transform="scale(1,-1)"
+       cx="4.8893518"
+       cy="-68.353371"
+       r="1"
+       style="fill:none;stroke:#000000;stroke-width:0.34999999;stroke-miterlimit:4;stroke-dasharray:none"
+       id="circle53" />
+  </g>
+</svg>
