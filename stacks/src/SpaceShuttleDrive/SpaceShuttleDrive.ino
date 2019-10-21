@@ -53,9 +53,9 @@ long act_x = 0;
 long act_y = 0;
 long act_rotate = 0;
 
-long maxRotSpeed = 16000L;
-long maxMoveSpeed = 16000L; // 16000
-long moveSpeed = 2000L; // 2000
+long maxRotSpeed = 1000L;  // 16000L
+long maxMoveSpeed = 1000L; // 16000L
+long moveSpeed = 40L; // 2000L
 
 int millivoltAvg;
 int millivolt;
@@ -92,7 +92,7 @@ void setup()
   analogWrite(FAN,0);
 
   digitalWrite(E0,    LOW);
-  digitalWrite(BED,   LOW);
+  digitalWrite(BED,   HIGH);
 
   digitalWrite(STEPPER1_STEP_EN, HIGH); // enable pin LOW = on
   digitalWrite(STEPPER2_STEP_EN, HIGH); // enable pin LOW = on
