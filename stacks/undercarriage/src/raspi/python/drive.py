@@ -5,19 +5,37 @@ import tornado.httpserver
 import tornado.ioloop
 import serial
 import threading
+import asyncio
 
 ser = serial.Serial('/dev/ttyUSB0', 38400, timeout=1)
 print(ser.name)
 
-def readSerial(ser):
-		while True:
+clients = []
+
+
+class ThreadReadSerial(threading.Thread):
+	running = 1
+	def run(self):
+		asyncio.set_event_loop(asyncio.new_event_loop())
+		while self.running:
 			try:
-				data = ser.readline();
-				# print('from Arduino: ', data
-				# received from Arduino written to all WebSocket clients
-				# [con.write_message(data) for con in WebSocketHandler.connections]
-			except Exception:
-				print('error1')
+				global ser
+				data = str(ser.readline()).replace('\n','')
+				if data!="b''":
+					c.write_message("test")
+					data.encode('utf8')
+					print(data)
+					# print('from Arduino: ', data
+					# received from Arduino written to all WebSocket clients
+					global clients
+					for c in clients:
+						c.write_message("test")
+						c.write_message(data)
+			except Exception as e:
+				print('error1'+str(e))
+			except serial.SerialException as es:
+				print('error ser '+str(es))
+
 
 
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
@@ -31,6 +49,8 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 				self.set_nodelay(True);
 				# ser.write("1");
 				# ser.write("m");
+				global clients
+				clients.append(self)
 				print('new connection was opened')
 				pass
 
@@ -45,6 +65,8 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 
 		def on_close(self):
 				self.connections.remove(self)
+				global clients
+				clients.remove(self)
 				print('connection closed')
 				pass
 
@@ -63,9 +85,10 @@ class Application(tornado.web.Application):
 
 if __name__ == '__main__':
 	ser.flushInput()
-	thread = threading.Thread(target=readSerial, args=(ser,))
-	thread.start()
+
 	ws_app = Application()
 	server = tornado.httpserver.HTTPServer(ws_app)
 	server.listen(9090)
+	serreadthread = ThreadReadSerial()
+	serreadthread.start()
 	tornado.ioloop.IOLoop.instance().start()

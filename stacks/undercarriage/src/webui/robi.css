@@ -1,0 +1,77 @@
+.feather {
+  width: 21px;
+  height: 21px;
+  stroke: #aaaaaa;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+.status
+{
+  width: 5vw;
+  height: 20px;
+  border-style: solid;
+  border-color: red;
+  border-width: 1px;
+}
+
+.btn_controll
+{
+  width:100%;
+  margin-bottom: 5px;
+}
+
+#top-infoarea
+{
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100vw;
+  height: 30px;
+  padding-top:2px;
+  padding-left: max(10px, env(safe-area-inset-left));
+  padding-right: max(10px, env(safe-area-inset-right));
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+#container-videostream
+{
+  position: fixed;
+  top:0px;
+  left:0px;
+  width: 100vw;
+  height: 100vh;
+
+  background-image: url("http://10.0.0.252/?action=stream");
+  background-color: black;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  background-position: 50% 80%;
+}
+
+#img-videostream
+{
+  height: 100vh;
+}
+
+#buttoncontrol
+{
+  display: none;
+}
+
+
+@media (orientation: portrait) {
+  #container-videostream
+  {
+    height: 33vh;
+  }
+
+  #container-videostream
+  {
+    background-size: cover;
+  }
+}

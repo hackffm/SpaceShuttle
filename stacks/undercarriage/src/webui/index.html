@@ -1,0 +1,77 @@
+<html>
+  <head>
+    <title>SpaceShuttle</title>
+    <meta charset="utf-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no, user-scalable=no, viewport-fit=cover">
+    <link rel="stylesheet" href="bootstrap.min.css"/>
+    <link rel="stylesheet" href="robi.css"/>
+
+    <link rel="apple-touch-icon" href="icon.png">
+    <link rel="apple-touch-startup-image" href="icon.png">
+  </head>
+  <body>
+
+    <div id="container-videostream"/>
+
+    <div id="top-infoarea">
+      <svg class="feather">
+        <use xlink:href="feather-sprite.svg#battery"/>
+      </svg>
+      <svg class="feather">
+        <use xlink:href="feather-sprite.svg#wifi"/>
+      </svg>
+      <svg class="feather">
+        <use xlink:href="feather-sprite.svg#wifi-off"/>
+      </svg>
+      <svg class="feather">
+        <use xlink:href="feather-sprite.svg#thermometer"/>
+      </svg>
+      <svg class="feather">
+        <use xlink:href="feather-sprite.svg#settings"/>
+      </svg>
+    </div>
+
+    <div class="container" id="buttoncontrol">
+      <div class="row" style="padding-bottom:10px;">
+        <div class="col">
+          <button type="button" class="btn_controll btn btn-primary" value="1" btnD='w' btnU=' '>Forward</button>
+          <button type="button" class="btn_controll btn btn-primary" value="2" btnD='s' btnU=' '>Backword</button>
+        </div>
+
+        <div class="col">
+          <button type="button" class="btn_controll btn btn-primary" value="3" btnD='a' btnU=' '>Rotate left</button>
+          <button type="button" class="btn_controll btn btn-primary" value="4" btnD='d' btnU=' '>Rotate right</button>
+        </div>
+      </div>
+
+      <div class="row" style="padding-bottom:10px;"></div>
+
+      <div class="row" style="padding-bottom:10px;">
+        <div class="col">
+          <button type="button" class="btn_controll btn btn-primary" value="5" btnD='q' btnU=' '>Move right</button>
+          <button type="button" class="btn_controll btn btn-primary" value="6" btnD='e' btnU=' '>Move left</button>
+        </div>
+
+      </div>
+
+      <div class="row" style="padding-bottom:10px;"></div>
+
+    </div>
+
+<!--
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <p id="out"></p>
+        </div>
+      </div>
+    </div>
+  -->
+
+
+    <script type="text/javascript" src="jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="bootstrap.min.js"></script>
+    <script type="text/javascript" src="main.js"></script>
+  </body>
+</html>
