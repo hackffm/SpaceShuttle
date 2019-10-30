@@ -23,7 +23,6 @@ function onLoad() {
 
 		ws.onopen = function(e) {
 			console.log('websocket connection open')
-			sendWebsocketCommand('v');
 		}
 }
 
@@ -65,7 +64,11 @@ $(document).ready(function() {
 		thisAtr = $(this).attr('btnU');
 		// $('#out').append(thisAtr);
 		// $('#status'+thisValue).css("background-color","white");
-		sendWebsocketCommand(thisAtr);
+
+		if(thisAtr!='')
+		{
+			sendWebsocketCommand(thisAtr)
+		}
 	});
 
 });

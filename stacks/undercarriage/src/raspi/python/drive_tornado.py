@@ -13,12 +13,6 @@ print(ser.name)
 clients = []
 
 
-def broadcastToClients(data):
-	global clients
-	for c in clients:
-		c.write_message(data)
-
-
 class ThreadReadSerial(threading.Thread):
 	running = 1
 	def run(self):
@@ -26,9 +20,17 @@ class ThreadReadSerial(threading.Thread):
 		while self.running:
 			try:
 				global ser
-				if ser.in_waiting > 0:
-					data = ser.readline().decode()
-					broadcastToClients(data)
+				data = str(ser.readline()).replace('\n','')
+				if data!="b''":
+					c.write_message("test")
+					data.encode('utf8')
+					print(data)
+					# print('from Arduino: ', data
+					# received from Arduino written to all WebSocket clients
+					global clients
+					for c in clients:
+						c.write_message("test")
+						c.write_message(data)
 			except Exception as e:
 				print('error1'+str(e))
 			except serial.SerialException as es:
