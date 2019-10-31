@@ -7,28 +7,35 @@ import serial
 import threading
 import asyncio
 
-ser = serial.Serial('/dev/ttyUSB0', 38400, timeout=1)
-print(ser.name)
+
 
 clients = []
 
 
-def broadcastToClients(data):
-	global clients
-	for c in clients:
-		c.write_message(data)
-
-
 class ThreadReadSerial(threading.Thread):
 	running = 1
+	serialbuff = ""
+	def __init__(self):
+		threading.Thread.__init__(self)
+		self.stop_event = threading.Event()
+		self.serialbuff = ""
+
+
 	def run(self):
+		global clients
+		global ser
 		asyncio.set_event_loop(asyncio.new_event_loop())
-		while self.running:
+		while not self.stop_event.is_set():
 			try:
-				global ser
-				if ser.in_waiting > 0:
-					data = ser.readline().decode()
-					broadcastToClients(data)
+				data = ser.read().decode()
+				if len(data)!=0:
+					print(data)
+					if data!='\n' and data!='\r':
+						self.serialbuff = self.serialbuff + data
+					if data == '\n':
+						for c in clients:
+							c.write_message(self.serialbuff)
+						self.serialbuff = ""
 			except Exception as e:
 				print('error1'+str(e))
 			except serial.SerialException as es:
@@ -44,7 +51,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 
 		def open(self):
 				self.connections.add(self)
-				self.set_nodelay(True);
+				self.set_nodelay(True)
 				# ser.write("1");
 				# ser.write("m");
 				global clients
@@ -53,13 +60,18 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 				pass
 
 		def on_message(self, message):
+				global ser
 				#print('from WebSocket: ', message
-				b = bytearray(message, 'utf-8')
+				b = bytearray(message+'\n', 'utf-8')
 				try:
-					ser.write(b);     # received from WebSocket writen to arduino
+					ser.write(b)     # received from WebSocket writen to arduino
+					print(b)
+					ser.flushInput()
+					ser.reset_input_buffer()
+					ser.reset_output_buffer()
 				# ser.write("ff?\n")
-				except Exception:
-					print('error2')
+				except Exception as e:
+					print('error2'+str(e))
 
 		def on_close(self):
 				self.connections.remove(self)
@@ -82,11 +94,17 @@ class Application(tornado.web.Application):
 		tornado.web.Application.__init__(self, handlers, **settings)
 
 if __name__ == '__main__':
+	ser = serial.Serial('/dev/ttyUSB0', 38400, timeout=1)
+	print(ser.name)
+
 	ser.flushInput()
+	ser.reset_input_buffer()
+	ser.reset_output_buffer()
 
 	ws_app = Application()
 	server = tornado.httpserver.HTTPServer(ws_app)
 	server.listen(9090)
 	serreadthread = ThreadReadSerial()
+	serreadthread.daemon = True
 	serreadthread.start()
 	tornado.ioloop.IOLoop.instance().start()

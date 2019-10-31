@@ -14,7 +14,7 @@ author: Shintaro F.
 #define POWERLED  40  // D40
 #define LIGHT     34  // A11
 #define FAN       9   // D9
-#define DRIVEPI   7   // D7
+#define E1        7   // D7 aka E1
 #define E0        10  // D10
 #define BED       8   // D8
 
@@ -77,7 +77,7 @@ void setup()
   pinMode(POWERLED,   OUTPUT);
   pinMode(LIGHT,      OUTPUT);
   pinMode(FAN,        OUTPUT);
-  pinMode(DRIVEPI,    OUTPUT);
+  pinMode(E1,         OUTPUT);
   pinMode(E0,         OUTPUT);
   pinMode(BED,        OUTPUT);
 
@@ -86,12 +86,12 @@ void setup()
 
   digitalWrite(LIGHT,     LOW);
   digitalWrite(FAN,       LOW);
-  digitalWrite(DRIVEPI,   HIGH);
+  digitalWrite(E1,       HIGH);
 
 
   analogWrite(FAN,0);
 
-  digitalWrite(E0,    LOW);
+  digitalWrite(E0,    HIGH);
   digitalWrite(BED,   HIGH);
 
   digitalWrite(STEPPER1_STEP_EN, HIGH); // enable pin LOW = on
@@ -301,7 +301,7 @@ void serialParser() {
         */
       }
       charCount = 0;
-      Serial.print(">");
+      Serial.println(">");
     }
   }
 }
