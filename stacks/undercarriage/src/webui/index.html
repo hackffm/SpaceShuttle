@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no, user-scalable=no, viewport-fit=cover">
-    <link rel="stylesheet" href="bootstrap.min.css"/>
     <link rel="stylesheet" href="robi.css"/>
 
     <link rel="apple-touch-icon" href="icon.png">
@@ -35,13 +34,21 @@
     <div class="container" id="buttoncontrol">
       <div class="row" style="padding-bottom:10px;">
         <div class="col">
-          <button type="button" class="btn_controll btn btn-primary" value="1" btnD='w' btnU=' '>Forward</button>
-          <button type="button" class="btn_controll btn btn-primary" value="2" btnD='s' btnU=' '>Backword</button>
+          <button type="button" class="btn_controll btn btn-primary" value="1" btnD='w' btnU=' '><svg class="feather">
+		        <use xlink:href="feather-sprite.svg#chevron-up"/>
+		      </svg></button>
+          <button type="button" class="btn_controll btn btn-primary" value="2" btnD='s' btnU=' '><svg class="feather">
+		        <use xlink:href="feather-sprite.svg#chevron-down"/>
+		      </svg></button>
         </div>
 
         <div class="col">
-          <button type="button" class="btn_controll btn btn-primary" value="3" btnD='a' btnU=' '>Rotate left</button>
-          <button type="button" class="btn_controll btn btn-primary" value="4" btnD='d' btnU=' '>Rotate right</button>
+          <button type="button" class="btn_controll btn btn-primary" value="3" btnD='a' btnU=' '><svg class="feather">
+		        <use xlink:href="feather-sprite.svg#corner-up-left"/>
+		      </svg></button>
+          <button type="button" class="btn_controll btn btn-primary" value="4" btnD='d' btnU=' '><svg class="feather">
+		        <use xlink:href="feather-sprite.svg#corner-up-right"/>
+		      </svg></button>
         </div>
       </div>
 
@@ -49,8 +56,12 @@
 
       <div class="row" style="padding-bottom:10px;">
         <div class="col">
-          <button type="button" class="btn_controll btn btn-primary" value="5" btnD='q' btnU=' '>Move right</button>
-          <button type="button" class="btn_controll btn btn-primary" value="6" btnD='e' btnU=' '>Move left</button>
+          <button type="button" class="btn_controll btn btn-primary" value="5" btnD='q' btnU=' '><svg class="feather">
+		        <use xlink:href="feather-sprite.svg#chevron-left"/>
+		      </svg></button>
+          <button type="button" class="btn_controll btn btn-primary" value="6" btnD='e' btnU=' '><svg class="feather">
+		        <use xlink:href="feather-sprite.svg#chevron-right"/>
+		      </svg></button>
         </div>
       </div>
 
@@ -76,7 +87,6 @@
 
 
     <script type="text/javascript" src="jquery-3.3.1.min.js"></script>
-    <script type="text/javascript" src="bootstrap.min.js"></script>
     <script type="text/javascript" src="main.js"></script>
   </body>
 </html>

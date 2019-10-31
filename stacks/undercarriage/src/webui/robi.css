@@ -21,6 +21,9 @@
 {
   width:100%;
   margin-bottom: 5px;
+	background-color: gray;
+	border-radius: 2px;
+	border-color: gray;
 }
 
 #top-infoarea
@@ -60,7 +63,7 @@
 
 #buttoncontrol
 {
-  /* display: none; */
+  display: none;
 }
 
 
@@ -74,4 +77,11 @@
   {
     background-size: cover;
   }
+
+	#buttoncontrol
+	{
+	  display: block;
+		top: 33vh;
+		position: absolute;
+	}
 }

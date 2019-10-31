@@ -29,10 +29,9 @@ class ThreadReadSerial(threading.Thread):
 			try:
 				data = ser.read().decode()
 				if len(data)!=0:
-					print(data)
-					if data!='\n' and data!='\r':
+					if data!='\n' and data!='\r' and data!='>':
 						self.serialbuff = self.serialbuff + data
-					if data == '\n':
+					if data == '\n' and self.serialbuff!="":
 						for c in clients:
 							c.write_message(self.serialbuff)
 						self.serialbuff = ""
@@ -65,7 +64,6 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 				b = bytearray(message+'\n', 'utf-8')
 				try:
 					ser.write(b)     # received from WebSocket writen to arduino
-					print(b)
 					ser.flushInput()
 					ser.reset_input_buffer()
 					ser.reset_output_buffer()
