@@ -1,6 +1,6 @@
 .feather {
   width: 21px;
-  height: 21px;
+  height: 30px;
   stroke: #aaaaaa;
   stroke-width: 2;
   stroke-linecap: round;
@@ -64,6 +64,16 @@
 #buttoncontrol
 {
   display: none;
+}
+
+#battval
+{
+
+	display: : inline;
+	position: relative;
+	color: #aaa;
+	vertical-align: middle;
+	height: 30px;
 }
 
 

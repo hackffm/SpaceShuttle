@@ -2,22 +2,28 @@ var ws;
 
 var rexminiData;
 
+var spaceshuttle_data = new Object()
+
 function onLoad() {
 		console.log('init websocket')
+
 
 		ws = new WebSocket("ws://10.0.0.254:9090/websocket");
 
 		ws.onmessage = function(e) {
 
-			// alert(e.data);
-			console.log(e)
+			// console.log(e)
 
-			/*
-			tmpStr = e.data.replace(/\n/g, "<br />");
-			if(tmpStr!='') {
-				rexminiData = tmpStr.split(" ");
+			tmp = e.data.split(":")
+
+			if(tmp[0]=='batt')
+			{
+				// console.log(tmp[1])
+				spaceshuttle_data.batt = tmp[1]
+				// console.log(spaceshuttle_data)
+
+				$("#battval").html(spaceshuttle_data.batt)
 			}
-			*/
 
 		};
 

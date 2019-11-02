@@ -6,10 +6,12 @@ import tornado.ioloop
 import serial
 import threading
 import asyncio
+import time
 
 
 
 clients = []
+serialready = True
 
 
 class ThreadReadSerial(threading.Thread):
@@ -40,6 +42,21 @@ class ThreadReadSerial(threading.Thread):
 			except serial.SerialException as es:
 				print('error ser '+str(es))
 
+class ThreadBroadcastHealth(threading.Thread):
+	def __init__(self):
+		threading.Thread.__init__(self)
+		self.stop_event = threading.Event()
+
+	def run(self):
+		global ser
+		while not self.stop_event.is_set():
+			try:
+				time.sleep(2)
+				battinforequest = bytearray('v\n', 'utf-8')
+				ser.write(battinforequest)
+				# print('request bat info')
+			except Exception as e:
+				print('error health '+str(e))
 
 
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
@@ -67,6 +84,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 					ser.flushInput()
 					ser.reset_input_buffer()
 					ser.reset_output_buffer()
+
 				# ser.write("ff?\n")
 				except Exception as e:
 					print('error2'+str(e))
@@ -102,7 +120,13 @@ if __name__ == '__main__':
 	ws_app = Application()
 	server = tornado.httpserver.HTTPServer(ws_app)
 	server.listen(9090)
+
 	serreadthread = ThreadReadSerial()
 	serreadthread.daemon = True
 	serreadthread.start()
+
+	readthreadhealth = ThreadBroadcastHealth()
+	readthreadhealth.daemon = True
+	readthreadhealth.start()
+
 	tornado.ioloop.IOLoop.instance().start()

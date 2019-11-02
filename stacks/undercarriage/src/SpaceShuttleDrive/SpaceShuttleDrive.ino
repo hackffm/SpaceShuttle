@@ -250,6 +250,7 @@ void serialParser() {
             break;
 
           case 'v':
+						Serial.print("batt:");
             Serial.println(millivolt);
             break;
 
