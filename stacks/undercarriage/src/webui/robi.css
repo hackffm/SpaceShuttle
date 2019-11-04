@@ -1,11 +1,13 @@
 .feather {
   width: 21px;
   height: 30px;
-  stroke: #aaaaaa;
+  stroke: white;
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
   fill: none;
+	margin-left: 5px;
+	margin-right: 5px;
 }
 
 .status
@@ -28,6 +30,7 @@
 
 #top-infoarea
 {
+	display: inline-flex;
   position: fixed;
   top: 0px;
   left: 0px;
@@ -37,6 +40,7 @@
   padding-left: max(10px, env(safe-area-inset-left));
   padding-right: max(10px, env(safe-area-inset-right));
   background-color: rgba(255, 255, 255, 0.1);
+	align-items: center;
 }
 
 #container-videostream
@@ -71,9 +75,13 @@
 
 	display: : inline;
 	position: relative;
-	color: #aaa;
-	vertical-align: middle;
+	color: white;
 	height: 30px;
+	font-size: 15px;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+	margin: 0px 10px 0px 5px;
+	line-height: 30px;
+	font-weight: 800;
 }
 
 
