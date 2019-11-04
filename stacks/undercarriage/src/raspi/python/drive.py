@@ -78,12 +78,19 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 		def on_message(self, message):
 				global ser
 				#print('from WebSocket: ', message
-				b = bytearray(message+'\n', 'utf-8')
 				try:
-					ser.write(b)     # received from WebSocket writen to arduino
-					ser.flushInput()
-					ser.reset_input_buffer()
-					ser.reset_output_buffer()
+					if message=='shutdown':
+						b = bytearray('p!999\n', 'utf-8')
+						ser.write(b)     # received from WebSocket writen to arduino
+						ser.flushInput()
+						ser.reset_input_buffer()
+						ser.reset_output_buffer()
+					else:
+						b = bytearray(message+'\n', 'utf-8')
+						ser.write(b)     # received from WebSocket writen to arduino
+						ser.flushInput()
+						ser.reset_input_buffer()
+						ser.reset_output_buffer()
 
 				# ser.write("ff?\n")
 				except Exception as e:
