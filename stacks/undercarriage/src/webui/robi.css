@@ -85,6 +85,29 @@
 }
 
 
+#debugOut
+{
+	position: fixed;
+	bottom: 0;
+	height: 30px;
+	width: 100vw;
+	border-color: red;
+	border-width: 1px;
+	border-style: solid;
+}
+
+
+#touchControlCanvas
+{
+	position: fixed;
+	top:0px;
+	left:0px;
+	width: 100vw;
+	height: 100vh;
+}
+
+
+
 @media (orientation: portrait) {
   #container-videostream
   {
@@ -101,5 +124,10 @@
 	  display: block;
 		top: 33vh;
 		position: absolute;
+	}
+
+	#touchControlCanvas
+	{
+		display: none;
 	}
 }

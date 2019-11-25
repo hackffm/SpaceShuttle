@@ -14,10 +14,13 @@ function onLoad() {
 
 			// console.log(e)
 
+			var batval = false;
+
 			tmp = e.data.split(":")
 
 			if(tmp[0]=='batt')
 			{
+				batval = true;
 				// console.log(tmp[1])
 				var battpercentage = 0;
 				spaceshuttle_data.batt = tmp[1]
@@ -25,6 +28,11 @@ function onLoad() {
 				battpercentage = (spaceshuttle_data.batt/25000)*100
 				battpercentage = Math.round(battpercentage)
 				$("#battval").html(battpercentage+'%')
+			}
+
+			if(!batval)
+			{
+				$("#debugOut").html(e.data)
 			}
 
 		};
