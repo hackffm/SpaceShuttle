@@ -248,6 +248,8 @@ function update() {
 
 			ypos = -ypos;
 
+      xpos = -xpos;
+
 			xpos = Math.round(300*(xpos/(w/2)));
 			ypos = Math.round(300*(ypos/(h/2)));
 
@@ -323,9 +325,9 @@ function update() {
 
 function moveChanged(x,y,r) {
 	moveUpdate = true;
-	moveLastchange_x = x;
-	moveLastchange_y = y;
-	moveLastchange_r = r;
+	moveLastchange_x = x*20;
+	moveLastchange_y = y*20;
+	moveLastchange_r = r*20;
 	sendMoveChange();
 }
 
