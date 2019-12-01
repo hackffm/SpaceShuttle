@@ -25,6 +25,9 @@ var moveLastchange_x = 0;
 var moveLastchange_y = 0;
 var moveLastchange_r = 0;
 
+var counterSent = 0;
+var counterSuccess = 0;
+
 var mouseControlOn = false;
 var shiftPressed = false;
 
@@ -69,8 +72,8 @@ function update() {
 
 	var i, len = touches.length;
 
-	ctx.font = "10px Arial";
-	// ctx.fillText("Touch len: "+len,30,30);
+	ctx.font = "20px Arial";
+	ctx.fillText("Touch len: "+len,30,30);
 
 	xpos = controlBox_x-w/2;
 	ypos = controlBox_y-h/2;
@@ -86,12 +89,18 @@ function update() {
 	gyro = alpha+' - '+beta+' - '+gammaa;
 	*/
 
+	serverSentStatus = ' '+counterSent+', rx: '+counterSuccess;
+
+	ctx.fillText("server tx:"+serverSentStatus,30,150);
 
 	//ctx.fillText("server feedback: "+serverFeedback+" : "+serverData.VBat,30,180);
 
 	//ctx.fillText("lidar: "+serverFeedback+" : "+serverLidarData.lidar,30,240);
 
-
+	// 23.6 = 0%, 25.6 = 100%
+	var batProzent = Math.round(((serverData.VBat - 23600) * 100) / 2000);
+    var batVolt = parseFloat(serverData.VBat)/1000.0;
+	ctx.fillText("battery state: "+batProzent+"% ["+batVolt.toPrecision()+"V]",30,210);
 
 	noMoveUpdate = true;
 
@@ -102,11 +111,11 @@ function update() {
 		ctx.beginPath();
 		ctx.arc(px, py, 70, 0, 2*Math.PI, true);
 
-		ctx.fillStyle = "rgba(200,200,200, 0.2)";
+		ctx.fillStyle = "rgba(0, 0, 200, 0.2)";
 		ctx.fill();
 
 		ctx.lineWidth = 2.0;
-		ctx.strokeStyle = "rgba(200,200,200, 0.8)";
+		ctx.strokeStyle = "rgba(0, 0, 200, 0.8)";
 		ctx.stroke();
 
 		// if only one touch point
@@ -147,7 +156,9 @@ function update() {
 			xpos = 0;
 		}
 
-		ctx.fillText("x: "+xpos+" y: "+ypos+" phi: "+controlBox_phi_txt,30,60);
+		ctx.fillText("x: "+xpos,30,60);
+		ctx.fillText("y: "+ypos,30,90);
+		ctx.fillText("phi: "+controlBox_phi_txt,30,120);
 
 
 		// moveChanged(xpos,ypos,controlBox_phi);
@@ -169,11 +180,11 @@ function update() {
 			ctx.beginPath();
 			ctx.arc(px, py, 70, 0, 2*Math.PI, true);
 
-			ctx.fillStyle = "rgba(200,200,200, 0.2)";
+			ctx.fillStyle = "rgba(0, 0, 200, 0.2)";
 			ctx.fill();
 
 			ctx.lineWidth = 2.0;
-			ctx.strokeStyle = "rgba(200,200,200, 0.8)";
+			ctx.strokeStyle = "rgba(0, 0, 200, 0.8)";
 			ctx.stroke();
 
 			if(len==1) {
@@ -255,12 +266,10 @@ function update() {
 			deltaY = moveLastchange_y - ypos;
 			deltaR = moveLastchange_r - Math.round(controlBox_phi);
 
-			/*
+
 			ctx.fillText("x: "+xpos,30,60);
 			ctx.fillText("y: "+ypos,30,90);
-			ctx.fillText("phi: "+controlBox_phi_txt,30,120);*/
-
-			ctx.fillText("x: "+xpos+" y: "+ypos+" phi: "+controlBox_phi_txt,30,60);
+			ctx.fillText("phi: "+controlBox_phi_txt,30,120);
 
 
 			// moveChanged(xpos,ypos,controlBox_phi);
@@ -289,13 +298,10 @@ function update() {
 		deltaY = moveLastchange_y - ypos;
 		deltaR = moveLastchange_r - Math.round(controlBox_phi);
 
-		/*
+
 		ctx.fillText("x: "+xpos,30,60);
 		ctx.fillText("y: "+ypos,30,90);
 		ctx.fillText("phi: "+controlBox_phi_txt,30,120);
-		*/
-
-		ctx.fillText("x: "+xpos+" y: "+ypos+" phi: "+controlBox_phi_txt,30,60);
 
 
 		// moveChanged(xpos,ypos,controlBox_phi);
@@ -312,14 +318,94 @@ function update() {
 
 	ctx.beginPath();
 	ctx.arc(w/2, h/2, 7, 0, 2*Math.PI, true);
-	ctx.fillStyle = "rgba(200,200,200, 1)";
+	ctx.fillStyle = "rgba(0, 0, 200, 1)";
 	ctx.fill();
 
+	renderLidarData();
 
+    if(Licht != LichtOld) {
+        var lichtcode = hexFromRGB(Licht, 0, 0);
+		$.ajax({
+			type: "POST",
+			url: "cgi",
+			data: {Color1: lichtcode},
+			success: function( data ) {
+			}
+		});
+        LichtOld = Licht;
+		if(Licht == 0) {
+			document.getElementById('btnLicht').childNodes[0].nodeValue = "Licht an";
+		} else {
+			document.getElementById('btnLicht').childNodes[0].nodeValue = "Licht aus";
+		}
+    }
 
 	updateStarted = false;
 }
 
+function lidarUpdate() {
+	$.ajax({
+		type: "POST",
+		url: "lidar",
+		data: {cmd: 'lidar'},
+		success: function( data ) {
+			counterSuccess++;
+			serverFeedback = data;
+			serverLidarData = JSON.parse(serverFeedback);
+			moveSent = false;
+			if(moveUpdate) sendMoveChange();
+
+			// renderLidarData();
+		}
+	});
+}
+
+function renderLidarData() {
+
+	var nw = window.innerWidth;
+	var nh = window.innerHeight;
+
+	if ((w != nw) || (h != nh)) {
+		w = nw;
+		h = nh;
+		canvas.style.width = w+'px';
+		canvas.style.height = h+'px';
+		canvas.width = w;
+		canvas.height = h;
+	}
+
+	wh = w/2;
+	hh = h/2;
+
+	lidarData = serverLidarData.lidar;
+	// lidarDataQuant = new array();
+	// lidarDataQuant = array();
+	maxLidarData = lidarData.length;
+
+	ctx.beginPath();
+	ctx.lineWidth = 2.0;
+	ctx.strokeStyle = "rgba(200, 200, 200, 0.5)";
+	maxLidarData = 360;
+	for(i=0; i<maxLidarData; i++) {
+		rad = ((i/maxLidarData)*(Math.PI*2))-(Math.PI/2);
+		dist = lidarData[i]/3;
+		x = Math.sin(rad)*dist;
+		y = Math.cos(rad)*dist;
+
+
+		ctx.moveTo(wh,hh);
+		ctx.lineTo(x+wh,y+hh);
+
+	}
+	ctx.stroke();
+
+	/*
+	for(i=0; i<lidarData.length; i++) {
+		degree = (i/maxLidarData)*360;
+		if(lidarDataQuant[i]>) lidarDataQuant[i] =
+	}
+*/
+}
 
 function moveChanged(x,y,r) {
 	moveUpdate = true;
@@ -330,12 +416,25 @@ function moveChanged(x,y,r) {
 }
 
 function sendMoveChange() {
+	counterSent++;
+
 	if(!moveSent) {
 		moveSent = true;
 		moveUpdate = false;
-
-		sendWebsocketCommand('m '+Math.round(moveLastchange_r)+' '+moveLastchange_y+' '+Math.round(moveLastchange_x*-1)+'\n');
-		moveSent = false;
+		$.ajax({
+		// cmd = move
+		// variables: x,y,r
+		type: "POST",
+		url: "cgi",
+		data: {cmd: 'move', x: moveLastchange_x, y: moveLastchange_y, r: moveLastchange_r},
+		success: function( data ) {
+			counterSuccess++;
+			serverFeedback = data;
+			serverData = JSON.parse(serverFeedback);
+			moveSent = false;
+			if(moveUpdate) sendMoveChange();
+		}
+	});
 	}
 }
 
@@ -387,7 +486,7 @@ function controlBox(x, y, phi, width,height) {
 
 function drawUIAxisCenterMarker(x, y) {
 	ctx.beginPath();
-	ctx.strokeStyle = "rgba(200,200,200, 1)";
+	ctx.strokeStyle = "rgba(0, 0, 200, 1)";
 	ctx.lineWidth = 1.0;
 	ctx.moveTo(x-10,y);
 	ctx.lineTo(x+10,y);
@@ -400,9 +499,12 @@ function drawUIAxisCenterMarker(x, y) {
 
 $(document).ready(function() {
 	// createImageLayer();
-	canvas = document.getElementById('touchControlCanvas');
+	canvas = document.getElementById('canvas');
 	ctx = canvas.getContext('2d');
 	timer = setInterval(update, 150);
+
+	// lidarTimer = setInterval(lidarUpdate,1000);
+
     /*
 	document.getElementById('tiltControl').addEventListener('mousedown',function(event) {
 		gyro = 'on';
@@ -411,6 +513,28 @@ $(document).ready(function() {
 		gyro = 'off';
 	});
     */
+
+	document.getElementById('c1h').addEventListener('change',function(event) {
+		Licht = document.getElementById('c1h').value;
+	});
+
+	document.getElementById('c1h').addEventListener('input',function(event) {
+		Licht = document.getElementById('c1h').value;
+	});
+
+	document.getElementById('btnLicht').addEventListener('click',function(event) {
+		var lichtcode = '000000';
+		if(Licht == 0) {
+			Licht = 255;
+			lichtcode = 'FFFFFF';
+			document.getElementById('btnLicht').childNodes[0].nodeValue = "Licht aus";
+		} else {
+			Licht = 0;
+			document.getElementById('btnLicht').childNodes[0].nodeValue = "Licht an";
+		}
+        document.getElementById('c1h').value = Licht;
+	});
+
 
 
 	canvas.addEventListener('touchend', function(event) {
@@ -452,6 +576,17 @@ $(document).ready(function() {
 		mouseControlOn = true;
 	});
 
+	document.body.addEventListener('keydown',function(event){
+		if(event.keyCode === 16 || event.charCode === 16){
+			shiftPressed = true;
+		}
+	});
+
+	document.body.addEventListener('keyup',function(event){
+		if(event.keyCode === 16 || event.charCode === 16){
+			shiftPressed = false;
+		}
+	});
 		// event.preventDefault();
 
 // console.log('start');
