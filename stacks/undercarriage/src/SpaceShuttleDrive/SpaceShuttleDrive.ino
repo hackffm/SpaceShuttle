@@ -53,15 +53,15 @@ long act_x = 0;
 long act_y = 0;
 long act_rotate = 0;
 
-long maxRotSpeed = 1000L;  // 16000L
-long maxMoveSpeed = 1000L; // 16000L
-long moveSpeed = 40L; // 2000L
+long maxMoveSpeed = 5000L; // 16000L
+long maxRotSpeed = 5000L;  // 16000L
+long moveSpeed = 5000L; // 2000L
 
 int millivoltAvg;
 int millivolt;
 int loopCnt = 0;
 
-#define DTIMEOUT 2000
+#define DTIMEOUT 500
 uint16_t driveTimeout = 0;
 
 void setup()
@@ -115,8 +115,10 @@ void setup()
   Serial.begin(38400);
 }
 
+int calcspeed_interval = 0;
+
 void loop() {
-  serialParser();
+
   stepper1.runSpeed();
   stepper2.runSpeed();
   stepper3.runSpeed();
@@ -124,6 +126,12 @@ void loop() {
   if(((uint16_t)millis() - driveTimeout) > DTIMEOUT) {
     driveTimeout = millis();
     drive(0,0,0);
+  }
+
+  if(calcspeed_interval++>500) {
+    serialParser();
+    calcspeed_interval = 0;
+    calcSpeed();
   }
 
   if(loopCnt++ > 5000) {
@@ -141,8 +149,45 @@ void loop() {
   }
 }
 
+long target_x = 0L;
+long target_y = 0L;
+long target_r = 0L;
 
 
+void calcSpeed()
+{
+  long delta_x = target_x - act_x;
+  long delta_y = target_y - act_y;
+  long delta_r = target_r - act_rotate;
+
+  if(abs(delta_x)>10L)
+  {
+    act_x = act_x + round(delta_x/10L);
+  } else {
+    act_x = target_x;
+  }
+
+  if(abs(delta_y)>10L)
+  {
+    act_y = act_y + round(delta_y/10L);
+  } else {
+    act_y = target_y;
+  }
+
+  if(abs(delta_r)>10L)
+  {
+    act_rotate = act_rotate + round(delta_r/10L);
+  } else {
+    act_rotate = target_r;
+  }
+
+
+  // act_x = constrain(x*32L,-16000L,16000L);
+  // act_y = constrain(y*32L,-16000L,16000L);
+  // act_rotate = constrain(rotate*-64L,-16000L,16000L);
+
+  updateWheels();
+}
 
 void updateWheels() {
   // calculate wheel speeds
@@ -151,7 +196,7 @@ void updateWheels() {
   lr = -act_x + act_y + act_rotate;
   rr = -act_x - act_y + act_rotate;
 
-  if((lf == 0) && (rf == 0) && (lr == 0) && (rr == 0)) {
+  if((lf == 0L) && (rf == 0L) && (lr == 0L) && (rr == 0L)) {
     digitalWrite(STEPPER1_STEP_EN, HIGH); // enable pin LOW = on
     digitalWrite(STEPPER2_STEP_EN, HIGH); // enable pin LOW = on
     digitalWrite(STEPPER3_STEP_EN, HIGH); // enable pin LOW = on
@@ -171,11 +216,10 @@ void updateWheels() {
 
 void drive(long x, long y, long rotate) {
   // later: add acceleration here
-  act_x = constrain(x*32L,-16000L,16000L);
-  act_y = constrain(y*32L,-16000L,16000L);
-  act_rotate = constrain(rotate*-64L,-16000L,16000L);
 
-  updateWheels();
+  target_x = x;
+  target_y = y;
+  target_r = rotate;
 }
 
 void serialParser() {
@@ -227,6 +271,13 @@ void serialParser() {
           case 'd':
             drive(moveSpeed,0L,0L);
             driveTimeout = millis();
+            break;
+          case 'i':
+            Serial.print(act_x);
+            Serial.print(',');
+            Serial.print(act_y);
+            Serial.print(',');
+            Serial.println(act_rotate);
             break;
 
           case 'm': // move
