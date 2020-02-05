@@ -8,7 +8,7 @@ function onLoad() {
 		console.log('init websocket')
 
 
-		ws = new WebSocket("ws://10.0.0.254:9090/websocket");
+		ws = new WebSocket("ws://10.0.10.11:9090/websocket");
 
 		ws.onmessage = function(e) {
 

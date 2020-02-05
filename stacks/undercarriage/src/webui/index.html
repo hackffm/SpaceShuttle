@@ -13,7 +13,7 @@
 
     <div id="container-videostream"/>
 
-		<canvas id="touchControlCanvas" width="100vw" height="100vh"></canvas>
+		<canvas id="touchControlCanvas" width="100vw" height="100vh" style="display:none;"></canvas>
 
     <div id="top-infoarea">
       <svg class="feather">
@@ -77,7 +77,7 @@
 
     </div>
 
-		<div id="debugOut"/>
+		<div id="debugOut"></div>
 
 <!--
     <div class="container">
@@ -88,10 +88,17 @@
       </div>
     </div>
   -->
+		<video id="remoteVideo" width="560" autoplay controls></video>
 
+		<button id="callButton">Call</button>
+
+		<button id="hangupButton">Hang Up</button>
 
     <script type="text/javascript" src="jquery-3.3.1.min.js"></script>
+		<!--
     <script type="text/javascript" src="main.js"></script>
 		<script type="text/javascript" src="touchcontrol.js"></script>
+	-->
+		<script type="text/javascript" src="webrtc.js"></script>
   </body>
 </html>
