@@ -1,6 +1,5 @@
 *.pyc
 *.swp
-doc/
 .DS_Store
 ._.DS_Store
 *.gcode
