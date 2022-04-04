@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2022-04-02T15:50:18.738Z" agent="5.0 (X11)" etag="AxZIAj_6coteMRNO4q0K" version="17.4.0" type="github">
+<mxfile host="app.diagrams.net" modified="2022-04-04T21:03:37.506Z" agent="5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.2 Safari/605.1.15" etag="aiRB0ecLnMe_riPNe8vM" version="17.4.0" type="github">
   <diagram name="Page-1" id="90a13364-a465-7bf4-72fc-28e22215d7a0">
-    <mxGraphModel dx="1990" dy="1153" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1.5" pageWidth="1169" pageHeight="826" background="none" math="0" shadow="0">
+    <mxGraphModel dx="746" dy="540" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1.5" pageWidth="1169" pageHeight="826" background="none" math="0" shadow="0">
       <root>
         <mxCell id="0" style=";html=1;" />
         <mxCell id="1" style=";html=1;" parent="0" />
@@ -9,7 +9,7 @@
             <mxRectangle x="400" y="960" width="50" height="40" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="qs7MlPvDUZvmC6Ha0CBg-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.89;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;endArrow=none;endFill=0;" edge="1" parent="trmzSCSJxpemy-L-cy7g-25" source="trmzSCSJxpemy-L-cy7g-78" target="trmzSCSJxpemy-L-cy7g-95">
+        <mxCell id="qs7MlPvDUZvmC6Ha0CBg-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.89;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;endArrow=none;endFill=0;" parent="trmzSCSJxpemy-L-cy7g-25" source="trmzSCSJxpemy-L-cy7g-78" target="trmzSCSJxpemy-L-cy7g-95" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="695" y="300" />
@@ -23,16 +23,8 @@
         <mxCell id="trmzSCSJxpemy-L-cy7g-83" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;fontSize=12;" parent="trmzSCSJxpemy-L-cy7g-25" source="trmzSCSJxpemy-L-cy7g-80" target="trmzSCSJxpemy-L-cy7g-78" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="trmzSCSJxpemy-L-cy7g-96" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;fontSize=12;" parent="trmzSCSJxpemy-L-cy7g-25" source="trmzSCSJxpemy-L-cy7g-80" target="trmzSCSJxpemy-L-cy7g-95" edge="1">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="620" y="110" />
-              <mxPoint x="840" y="110" />
-            </Array>
-          </mxGeometry>
-        </mxCell>
         <mxCell id="trmzSCSJxpemy-L-cy7g-80" value="DC/DC convert &lt;br&gt;from VBUS-Stack to 5V" style="rounded=0;whiteSpace=wrap;html=1;shadow=1;" parent="trmzSCSJxpemy-L-cy7g-25" vertex="1">
-          <mxGeometry x="520" y="9.995384615384623" width="200" height="70.15384615384616" as="geometry" />
+          <mxGeometry x="377" y="9.995384615384623" width="200" height="70.15384615384616" as="geometry" />
         </mxCell>
         <mxCell id="trmzSCSJxpemy-L-cy7g-95" value="Wifi router" style="rounded=0;whiteSpace=wrap;html=1;shadow=1;glass=0;fontSize=12;strokeColor=default;strokeWidth=1;fillColor=default;" parent="trmzSCSJxpemy-L-cy7g-25" vertex="1">
           <mxGeometry x="780" y="140" width="120" height="120" as="geometry" />
@@ -57,7 +49,7 @@
         <mxCell id="trmzSCSJxpemy-L-cy7g-55" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" parent="trmzSCSJxpemy-L-cy7g-23" source="trmzSCSJxpemy-L-cy7g-56" target="trmzSCSJxpemy-L-cy7g-54" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="trmzSCSJxpemy-L-cy7g-56" value="Drive MCU&lt;br&gt;&lt;br&gt;Makerbase MKS GEN L 1.0&lt;br&gt;with&amp;nbsp;&lt;br&gt;4x Pololu DRV8825 Stepper Motor Driver" style="rounded=0;whiteSpace=wrap;html=1;shadow=1;" parent="trmzSCSJxpemy-L-cy7g-23" vertex="1">
+        <mxCell id="trmzSCSJxpemy-L-cy7g-56" value="Drive MCU&lt;br&gt;&lt;br&gt;Makerbase MKS GEN L 1.0&lt;br&gt;with&amp;nbsp;&lt;br&gt;4x Pololu DRV8825 Stepper Motor Driver" style="rounded=0;whiteSpace=wrap;html=1;shadow=1;points=[[0,0,0,0,0],[0,0.25,0,0,0],[0,0.5,0,0,0],[0,0.75,0,0,0],[0,1,0,0,0],[0.25,0,0,0,0],[0.25,1,0,0,0],[0.5,0,0,0,0],[0.5,1,0,0,0],[0.75,0,0,0,0],[0.75,1,0,0,0],[1,0,0,0,0],[1,0.14,0,0,0],[1,0.29,0,0,0],[1,0.43,0,0,0],[1,0.57,0,0,0],[1,0.71,0,0,0],[1,0.86,0,0,0],[1,1,0,0,0]];" parent="trmzSCSJxpemy-L-cy7g-23" vertex="1">
           <mxGeometry x="190" y="180" width="200" height="240" as="geometry" />
         </mxCell>
         <mxCell id="trmzSCSJxpemy-L-cy7g-57" value="4x Stepper Motor" style="whiteSpace=wrap;html=1;aspect=fixed;shadow=1;" parent="trmzSCSJxpemy-L-cy7g-23" vertex="1">
@@ -83,13 +75,8 @@
         <mxCell id="trmzSCSJxpemy-L-cy7g-63" value="Lead acid battery&lt;br&gt;2x 12V serial&amp;nbsp;" style="rounded=0;whiteSpace=wrap;html=1;shadow=1;" parent="trmzSCSJxpemy-L-cy7g-23" vertex="1">
           <mxGeometry x="730" y="110" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="trmzSCSJxpemy-L-cy7g-64" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;fontSize=23;" parent="trmzSCSJxpemy-L-cy7g-23" source="trmzSCSJxpemy-L-cy7g-65" target="trmzSCSJxpemy-L-cy7g-56" edge="1">
-          <mxGeometry relative="1" as="geometry">
-            <mxPoint x="630" y="350" as="targetPoint" />
-            <Array as="points">
-              <mxPoint x="630" y="300" />
-            </Array>
-          </mxGeometry>
+        <mxCell id="zINLWR6aCzDTXZUWsbrM-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.57;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="trmzSCSJxpemy-L-cy7g-23" source="trmzSCSJxpemy-L-cy7g-65" target="trmzSCSJxpemy-L-cy7g-56">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="trmzSCSJxpemy-L-cy7g-65" value="MosFET" style="whiteSpace=wrap;html=1;aspect=fixed;shadow=1;" parent="trmzSCSJxpemy-L-cy7g-23" vertex="1">
           <mxGeometry x="590" y="200" width="80" height="80" as="geometry" />
@@ -150,11 +137,14 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="X_bJVh7z9mSjw5fobOmi-6" value="&lt;div&gt;VBUS-Stacks&lt;/div&gt;&lt;div&gt;switched by MCU FET&lt;br&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="trmzSCSJxpemy-L-cy7g-23" vertex="1">
-          <mxGeometry x="425" y="370" width="130" height="30" as="geometry" />
-        </mxCell>
         <mxCell id="X_bJVh7z9mSjw5fobOmi-7" value="&lt;div&gt;switched by MCU FET&lt;br&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="trmzSCSJxpemy-L-cy7g-23" vertex="1">
           <mxGeometry x="365" y="445" width="130" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="X_bJVh7z9mSjw5fobOmi-6" value="&lt;div&gt;VBUS-Stacks&lt;/div&gt;&lt;div&gt;switched by MCU FET&lt;br&gt;&lt;/div&gt;&lt;div&gt;2. power&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="trmzSCSJxpemy-L-cy7g-23" vertex="1">
+          <mxGeometry x="561" y="386" width="130" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="zINLWR6aCzDTXZUWsbrM-4" value="&lt;div&gt;VBUS-Wifi&lt;/div&gt;&lt;div&gt;switched by MCU FET 1. power&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="trmzSCSJxpemy-L-cy7g-23">
+          <mxGeometry x="658" y="320" width="180" height="30" as="geometry" />
         </mxCell>
         <mxCell id="trmzSCSJxpemy-L-cy7g-72" value="Serial via USB&amp;nbsp;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="trmzSCSJxpemy-L-cy7g-53" vertex="1">
           <mxGeometry x="190" y="480" width="100" height="20" as="geometry" />
@@ -170,7 +160,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="trmzSCSJxpemy-L-cy7g-87" value="DC/DC convert &lt;br&gt;from VBUS-Stack to 5V" style="rounded=0;whiteSpace=wrap;html=1;shadow=1;" parent="trmzSCSJxpemy-L-cy7g-84" vertex="1">
-          <mxGeometry x="600" y="19.995384615384623" width="200" height="70.15384615384616" as="geometry" />
+          <mxGeometry x="400" y="19.995384615384623" width="200" height="70.15384615384616" as="geometry" />
         </mxCell>
         <mxCell id="trmzSCSJxpemy-L-cy7g-89" value="Drive control / Raspberry Pi" style="rounded=0;whiteSpace=wrap;html=1;shadow=1;" parent="trmzSCSJxpemy-L-cy7g-84" vertex="1">
           <mxGeometry x="120" y="80" width="200" height="120" as="geometry" />
@@ -202,9 +192,14 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="X_bJVh7z9mSjw5fobOmi-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;" parent="1" source="trmzSCSJxpemy-L-cy7g-56" edge="1">
+        <mxCell id="zINLWR6aCzDTXZUWsbrM-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.86;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="trmzSCSJxpemy-L-cy7g-56">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="960" y="610" as="targetPoint" />
+            <mxPoint x="1120" y="740" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zINLWR6aCzDTXZUWsbrM-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.71;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="trmzSCSJxpemy-L-cy7g-56" target="trmzSCSJxpemy-L-cy7g-95">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1050" y="600" as="targetPoint" />
           </mxGeometry>
         </mxCell>
       </root>
